@@ -1,6 +1,6 @@
 var counter = 0;
 
-var queryURL = "https://opentdb.com/api.php?amount=10&category=9&difficulty=hard&type=multiple&encode=url3986";
+const queryURL = "https://opentdb.com/api.php?amount=10&category=9&difficulty=hard&type=multiple&encode=url3986";
 
 $.ajax({
 url: queryURL,
@@ -9,44 +9,72 @@ method: "GET"
 
 console.log(initialQuestions);
 
-answer1 = `initialQuestions.results."0".correct_answer`;
-answer2 = `initialQuestions.results."0".incorrect_answers[0]`;
-answer3 = `initialQuestions.results."0".incorrect_answers[1]`;
-answer4 = `initialQuestions.results."0".incorrect_answers[2]`;
-question = `initialQuestions.results."0".question`;
-answers = [answer1, answer2, answer3, answer4];
+let answer1 = decodeURIComponent(initialQuestions.results[0].correct_answer);
+let answer2 = decodeURIComponent(initialQuestions.results[0].incorrect_answers[0]);
+let answer3 = decodeURIComponent(initialQuestions.results[0].incorrect_answers[1]);
+let answer4 = decodeURIComponent(initialQuestions.results[0].incorrect_answers[2]);
+let question = decodeURIComponent(initialQuestions.results[0].question);
+let answers = [answer1, answer2, answer3, answer4];
+let questionDiv = $(`<div class="card">`);
+questionDiv.append(question);
+$("#question").append(questionDiv);
+setTimeout(questionAsker, 10000);
 
 for (i=0; i<4; i++) {
 
-
-var questionDiv = $(`<div class="custom-control custom-radio">`);
-questionDiv.append(`<input type="radio" id="question${i}" name="customRadio" class="custom-control-input">`);
-questionDiv.append(`<label class="custom-control-label" for="question${i}">${answers[i]}</label>`);
+let answerDiv = $(`<div class="custom-control custom-radio">`);
+answerDiv.append(`<input type="radio" id="question${i}" name="customRadio" class="custom-control-input">`);
+answerDiv.append(`<label class="custom-control-label" for="question${i}">${answers[i]}</label>`);
+console.log(answerDiv);
+$("#question").append(answerDiv);
 }
-
-$("#movie-view").append(newDiv);
 
 });
 
-setTimeout(questionAsker(), 10000);
+setTimeout(checker(), 10000);
 
-if (counter < 10) {
-    questionAsker();
+function checker () {
+
+    if (counter < 10) {
+        questionAsker();
+    }
+
+    else if (counter=10) {
+   newGame();
+    }
+
 }
-
-else if (counter=10) {
-    newGame();
-}
-
 function questionAsker() {
-    
-    setTimeout(questionAsker(), 10000);
+
+    questionRender();
+    setTimeout(checker(),10000);
+
 }
 
 function newGame() {
-
+    
 }
 
-function radioButtonRender() {
+function questionRender() {
+
+    let answer1 = decodeURIComponent(initialQuestions.results[0].correct_answer);
+    let answer2 = decodeURIComponent(initialQuestions.results[0].incorrect_answers[0]);
+    let answer3 = decodeURIComponent(initialQuestions.results[0].incorrect_answers[1]);
+    let answer4 = decodeURIComponent(initialQuestions.results[0].incorrect_answers[2]);
+    let question = decodeURIComponent(initialQuestions.results[0].question);
+    let answers = [answer1, answer2, answer3, answer4];
+    let questionDiv = $(`<div class="card">`);
+    questionDiv.append(question);
+    $("#question").append(questionDiv);
+
+    for (i=0; i<4; i++) {
+
+        let answerDiv = $(`<div class="custom-control custom-radio">`);
+        answerDiv.append(`<input type="radio" id="question${i}" name="customRadio" class="custom-control-input">`);
+        answerDiv.append(`<label class="custom-control-label" for="question${i}">${answers[i]}</label>`);
+        console.log(answerDiv);
+        $("#question").append(answerDiv);
+
+        }
 
 }
